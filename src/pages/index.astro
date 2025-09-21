@@ -1,0 +1,67 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import type { GameStats } from "../../types";
+
+import GameList from "../components/GameList.astro";
+
+import "../styles/global.css";
+
+const lastWeek = 2;
+const data: { gameStats: Partial<GameStats>[] } = { gameStats: [] };
+for (let i = 1; i <= lastWeek; i++) {
+  const response = await fetch(`${import.meta.env.API_URL}/games/2025/${i}`);
+  const gameList = (await response.json()) as GameStats[];
+  gameList.forEach((gameStats: GameStats) => {
+    data.gameStats.push(
+      {
+        ...gameStats,
+        year: 2025,
+      },
+      // id: gameStats.id,
+      // week: i,
+      // fullName: gameStats.fullName,
+      // shortName: gameStats.shortName,
+      // matchupQuality: gameStats.matchupQuality,
+      // offense: gameStats.offense,
+      // scenario: gameStats.scenarioRating,
+      // // marginOfVictory: gameStats.scenario?.marginOfVictory,
+      // // offensiveBigPlays: gameStats.offense.offensiveBigPlays,
+      // // offensiveExplosivePlays: gameStats.offense.offensiveExplosivePlays,
+      // // offensiveRating: computeOffensiveRating(gameStats),
+      // // defensiveBigPlays: computeDefensiveBigPlays(gameStats),
+      // // leadershipChange: gameStats.scenario.leadershipChange,
+      // // fourthQuarterLeadershipChange:
+      // //   gameStats.scenario.fourthQuarterLeadershipChange,
+      // // scenarioRating: gameStats.scenario.scenarioRating,
+      // totalRating:
+      //   computeOffensiveRating(gameStats) * 1.5 +
+      //   computeDefensiveBigPlays(gameStats) * 0.5 +
+      //   gameStats.scenario.scenarioRating,
+    );
+  });
+  data.gameStats = data.gameStats.sort(
+    (a, b) => b.offensiveRating - a.offensiveRating,
+    // (a, b) => b.defensiveBigPlays - a.defensiveBigPlays
+    // (a, b) => b.scenarioRating - a.scenarioRating
+    // (a, b) => b.totalRating - a.totalRating
+  );
+}
+// const randomUser = data.results[0];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <GameList gameStats={data.gameStats} />
+    </main>
+    <Footer />
+  </body>
+</html>
