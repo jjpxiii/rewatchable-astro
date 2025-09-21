@@ -8,9 +8,10 @@ import type { GameStats } from "../../types";
 import GameList from "../components/GameList.astro";
 
 import "../styles/global.css";
+import GameListInt from "../components/GameList";
 
 const lastWeek = 2;
-const data: { gameStats: Partial<GameStats>[] } = { gameStats: [] };
+const data: { gameStats: GameStats[] } = { gameStats: [] };
 for (let i = 1; i <= lastWeek; i++) {
   const response = await fetch(`${import.meta.env.API_URL}/games/2025/${i}`);
   const gameList = (await response.json()) as GameStats[];
@@ -61,6 +62,8 @@ for (let i = 1; i <= lastWeek; i++) {
     <Header />
     <main>
       <GameList gameStats={data.gameStats} />
+      --------------------------------
+      <GameListInt gameStats={data.gameStats} />
     </main>
     <Footer />
   </body>

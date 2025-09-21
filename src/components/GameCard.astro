@@ -3,6 +3,9 @@ import { type GameStats } from "../../types";
 
 const { gameStats } = Astro.props as { gameStats: GameStats };
 import "../styles/global.css";
+
+console.log("ZEFJPOJZEFPOJZEPOJF");
+console.log(gameStats);
 ---
 
 <a href={`${gameStats.year}/game/${gameStats.shortName}`} class="group">

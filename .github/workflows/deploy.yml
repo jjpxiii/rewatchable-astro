@@ -8,6 +8,8 @@ jobs:
     permissions:
       id-token: write # Needed for auth with Deno Deploy
       contents: read # Needed to clone the repository
+    env:
+      API_URL: https://rewatchablegames-api.deno.dev
 
     steps:
       - name: Clone repository
@@ -29,6 +31,6 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: my-deno-project # TODO: replace with Deno Deploy project name
+          project: rewatchable # TODO: replace with Deno Deploy project name
           entrypoint: jsr:@std/http/file-server
           root: dist
