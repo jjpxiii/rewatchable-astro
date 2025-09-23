@@ -8,9 +8,8 @@ import type { GameStats } from "../../types";
 import GameList from "../components/GameList.astro";
 
 import "../styles/global.css";
-import GameListInt from "../components/GameList";
 
-const lastWeek = 2;
+const lastWeek = 3;
 const data: { gameStats: GameStats[] } = { gameStats: [] };
 for (let i = 1; i <= lastWeek; i++) {
   const response = await fetch(`${import.meta.env.API_URL}/games/2025/${i}`);
@@ -20,9 +19,13 @@ for (let i = 1; i <= lastWeek; i++) {
       {
         ...gameStats,
         year: 2025,
+        week: i,
+        totalRating:
+          gameStats.offensiveRating * 1.5 +
+          gameStats.defensiveBigPlays * 0.5 +
+          gameStats.scenarioRating,
       },
       // id: gameStats.id,
-      // week: i,
       // fullName: gameStats.fullName,
       // shortName: gameStats.shortName,
       // matchupQuality: gameStats.matchupQuality,
@@ -37,17 +40,10 @@ for (let i = 1; i <= lastWeek; i++) {
       // // fourthQuarterLeadershipChange:
       // //   gameStats.scenario.fourthQuarterLeadershipChange,
       // // scenarioRating: gameStats.scenario.scenarioRating,
-      // totalRating:
-      //   computeOffensiveRating(gameStats) * 1.5 +
-      //   computeDefensiveBigPlays(gameStats) * 0.5 +
-      //   gameStats.scenario.scenarioRating,
     );
   });
-  data.gameStats = data.gameStats.sort(
-    (a, b) => b.offensiveRating - a.offensiveRating,
-    // (a, b) => b.defensiveBigPlays - a.defensiveBigPlays
-    // (a, b) => b.scenarioRating - a.scenarioRating
-    // (a, b) => b.totalRating - a.totalRating
+  data.gameStats = data.gameStats.toSorted(
+    (a, b) => b.totalRating - a.totalRating,
   );
 }
 // const randomUser = data.results[0];
@@ -63,7 +59,7 @@ for (let i = 1; i <= lastWeek; i++) {
     <main>
       <GameList gameStats={data.gameStats} />
       --------------------------------
-      <GameListInt gameStats={data.gameStats} />
+      <!-- <GameListInt gameStats={data.gameStats} /> -->
     </main>
     <Footer />
   </body>

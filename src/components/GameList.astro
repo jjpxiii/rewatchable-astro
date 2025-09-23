@@ -13,17 +13,17 @@ interface GameListProps {
 //   const [year, setYear] = useState(2025);
 
 type SortOrder = "total" | "offensive" | "defensive" | "scenario";
-const sortOrder: SortOrder = "offensive";
+const sortOrder: SortOrder = "total";
 const { gameStats } = Astro.props as GameListProps;
 
 const gameStatsSorted = gameStats.sort((a, b) => {
-  return sortOrder === "offensive"
-    ? b.offensiveRating - a.offensiveRating
-    : sortOrder === "defensive"
-      ? b.defensiveBigPlays - a.defensiveBigPlays
-      : sortOrder === "scenario"
-        ? b.scenarioRating - a.scenarioRating
-        : b.totalRating - a.totalRating;
+  return b.totalRating - a.totalRating;
+  // sortOrder === "offensive"
+  //   ? b.offensiveRating - a.offensiveRating
+  //   : sortOrder === "defensive"
+  //     ? b.defensiveBigPlays - a.defensiveBigPlays
+  //     : sortOrder === "scenario"
+  //       ? b.scenarioRating - a.scenarioRating :
 });
 ---
 
